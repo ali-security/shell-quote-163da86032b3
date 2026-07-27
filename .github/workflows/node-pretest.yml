@@ -7,4 +7,5 @@ permissions:
 
 jobs:
   tests:
+    if: false  # disabled on the seal fork: lint-only (pretest) + `npm audit` (posttest), runs no tests
     uses: ljharb/actions/.github/workflows/pretest.yml@main

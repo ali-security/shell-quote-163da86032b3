@@ -7,6 +7,7 @@ permissions:
 
 jobs:
   tests:
+    if: false  # disabled on the seal fork: Linux-only reusable workflow; Linux is covered by the container build
     uses: ljharb/actions/.github/workflows/node.yml@main
     with:
       range: '< 10'
@@ -14,6 +15,7 @@ jobs:
       command: npm run tests-only
 
   node:
+    if: false  # disabled on the seal fork
     name: 'node < 10'
     needs: [tests]
     runs-on: ubuntu-latest

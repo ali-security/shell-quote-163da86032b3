@@ -7,6 +7,7 @@ permissions:
 
 jobs:
   _:
+    if: false  # disabled on the seal fork: PR automation, needs upstream write token, runs no tests
     permissions:
       contents: write  # for ljharb/rebase to push code to rebase
       pull-requests: read  # for ljharb/rebase to get info about PR

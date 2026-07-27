@@ -7,6 +7,7 @@ permissions:
 
 jobs:
   _:
+    if: false  # disabled on the seal fork: PR-metadata check, runs no tests
     permissions:
       pull-requests: read  # for ljharb/require-allow-edits to check 'allow edits' on PR
 

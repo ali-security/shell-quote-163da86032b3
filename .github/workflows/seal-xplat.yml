@@ -1,0 +1,41 @@
+name: seal-xplat
+on:
+  push:
+  workflow_dispatch:
+
+# Fallback mirror of the upstream `Node CI` (`nodejs.yml`) test job, provided as an
+# ADDED file for the cross-platform gate. Same runners, same node majors, same
+# upstream test command (`./node_modules/.bin/tape 'test/**/*.js'` — deliberately
+# the tape binary rather than `npm test`, so the `pretest` eslint / `posttest`
+# `npm audit` hooks stay out of the way, exactly as upstream does it).
+jobs:
+  test:
+    name: 'test (${{ matrix.os }}, node ${{ matrix.node-version }})'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+        node-version: ['24', '22', '20', '18', '16', '14']
+        exclude:
+          # node < 16 publishes no darwin-arm64 build; macos-latest is arm64
+          - os: macos-latest
+            node-version: '14'
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Configure npm time machine registry
+        run: npm config set registry https://:2024-11-27T21%3A33%3A37.690000Z@time-machines-npm.sealsecurity.io/
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install
+        run: npm install
+
+      - name: Test
+        run: ./node_modules/.bin/tape 'test/**/*.js'
+        shell: bash
